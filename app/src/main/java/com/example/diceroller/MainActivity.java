@@ -18,8 +18,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageViewDice4;
     private ImageView imageViewDice5;
     private ImageView imageViewDice6;
+    private ImageView[] imageViewDices;
     private Random rng = new Random();
     private int diceCount = 6;
+    private int diceRollCount = 6;
+    private StringBuilder logBuffer;
     private String templog;
     ArrayList<String> itemList;
 
@@ -35,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         imageViewDice5 = findViewById(R.id.imageDice5);
         imageViewDice6 = findViewById(R.id.imageDice6);
 
+        imageViewDices = new ImageView[]{imageViewDice1, imageViewDice2, imageViewDice3, imageViewDice4, imageViewDice5, imageViewDice6};
+
+
+
         Intent i = getIntent();
         itemList = i.getStringArrayListExtra("logs");
 
@@ -43,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void rollOnClick(View v){
-        rollDice();
+        rollDices();
     }
 
     public void removeDiceOnClick(View v){
@@ -73,230 +80,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDice(){
-        switch(diceCount) {
-            case 6:
-                imageViewDice6.setVisibility(View.VISIBLE);
-                break;
-            case 5:
-                imageViewDice5.setVisibility(View.VISIBLE);
-                break;
-            case 4:
-                imageViewDice4.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                imageViewDice3.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                imageViewDice2.setVisibility(View.VISIBLE);
-                break;
-        }
+        imageViewDices[diceCount-1].setVisibility(View.VISIBLE);
     }
 
     private void removeDice(){
-        switch(diceCount) {
-            case 6:
-                imageViewDice6.setVisibility(View.INVISIBLE);
-                break;
-            case 5:
-                imageViewDice5.setVisibility(View.INVISIBLE);
-                break;
-            case 4:
-                imageViewDice4.setVisibility(View.INVISIBLE);
-                break;
-            case 3:
-                imageViewDice3.setVisibility(View.INVISIBLE);
-                break;
-            case 2:
-                imageViewDice2.setVisibility(View.INVISIBLE);
-                break;
-        }
+        imageViewDices[diceCount-1].setVisibility(View.INVISIBLE);
     }
 
-    private void rollDice(){
-        switch(diceCount) {
-            case 1:
-                templog = ("" + rollDice1());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
-            case 2:
-                templog = ("" + rollDice1() + ", " + rollDice2());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
-            case 3:
-                templog = ("" + rollDice1() + ", " + rollDice2() + ", " + rollDice3());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
-            case 4:
-                templog = ("" + rollDice1() + ", " + rollDice2() + ", " + rollDice3() + ", " + rollDice4());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
-            case 5:
-                templog = ("" + rollDice1() + ", " + rollDice2() + ", " + rollDice3() + ", " + rollDice4() + ", " + rollDice5());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
-            case 6:
-                templog = ("" + rollDice1() + ", " + rollDice2() + ", " + rollDice3() + ", " + rollDice4() + ", " + rollDice5() + ", " + rollDice6());
-                itemList.add(templog);
-                Log.i("TEMPLOG", templog);
-                break;
+    private void rollDices(){
+
+        logBuffer = new StringBuilder();
+
+        for (int i = 0; i < diceCount; i++)
+        {
+            int randomNumber = rng.nextInt(6) + 1;
+            setDiceImage(randomNumber);
+            templog = (String.valueOf(randomNumber));
+            logBuffer.append(templog + ", ");
+            diceRollCount--;
         }
+
+        diceRollCount = diceCount;
+        itemList.add(logBuffer.toString());
     }
+    
+    private void setDiceImage(int rolled){
 
-    private int rollDice1(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
+        switch(rolled) {
             case 1:
-                imageViewDice1.setImageResource(R.drawable.dice1);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice1);
                 break;
             case 2:
-                imageViewDice1.setImageResource(R.drawable.dice2);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice2);
                 break;
             case 3:
-                imageViewDice1.setImageResource(R.drawable.dice3);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice3);
                 break;
             case 4:
-                imageViewDice1.setImageResource(R.drawable.dice4);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice4);
                 break;
             case 5:
-                imageViewDice1.setImageResource(R.drawable.dice5);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice5);
                 break;
             case 6:
-                imageViewDice1.setImageResource(R.drawable.dice6);
+                imageViewDices[diceRollCount-1].setImageResource(R.drawable.dice6);
                 break;
         }
-
-        return randomNumber;
-
-    }
-    private int rollDice2(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
-            case 1:
-                imageViewDice2.setImageResource(R.drawable.dice1);
-                break;
-            case 2:
-                imageViewDice2.setImageResource(R.drawable.dice2);
-                break;
-            case 3:
-                imageViewDice2.setImageResource(R.drawable.dice3);
-                break;
-            case 4:
-                imageViewDice2.setImageResource(R.drawable.dice4);
-                break;
-            case 5:
-                imageViewDice2.setImageResource(R.drawable.dice5);
-                break;
-            case 6:
-                imageViewDice2.setImageResource(R.drawable.dice6);
-                break;
-        }
-        return randomNumber;
-    }
-    private int rollDice3(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
-            case 1:
-                imageViewDice3.setImageResource(R.drawable.dice1);
-                break;
-            case 2:
-                imageViewDice3.setImageResource(R.drawable.dice2);
-                break;
-            case 3:
-                imageViewDice3.setImageResource(R.drawable.dice3);
-                break;
-            case 4:
-                imageViewDice3.setImageResource(R.drawable.dice4);
-                break;
-            case 5:
-                imageViewDice3.setImageResource(R.drawable.dice5);
-                break;
-            case 6:
-                imageViewDice3.setImageResource(R.drawable.dice6);
-                break;
-        }
-        return randomNumber;
-    }
-    private int rollDice4(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
-            case 1:
-                imageViewDice4.setImageResource(R.drawable.dice1);
-                break;
-            case 2:
-                imageViewDice4.setImageResource(R.drawable.dice2);
-                break;
-            case 3:
-                imageViewDice4.setImageResource(R.drawable.dice3);
-                break;
-            case 4:
-                imageViewDice4.setImageResource(R.drawable.dice4);
-                break;
-            case 5:
-                imageViewDice4.setImageResource(R.drawable.dice5);
-                break;
-            case 6:
-                imageViewDice4.setImageResource(R.drawable.dice6);
-                break;
-        }
-        return randomNumber;
-    }
-    private int rollDice5(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
-            case 1:
-                imageViewDice5.setImageResource(R.drawable.dice1);
-                break;
-            case 2:
-                imageViewDice5.setImageResource(R.drawable.dice2);
-                break;
-            case 3:
-                imageViewDice5.setImageResource(R.drawable.dice3);
-                break;
-            case 4:
-                imageViewDice5.setImageResource(R.drawable.dice4);
-                break;
-            case 5:
-                imageViewDice5.setImageResource(R.drawable.dice5);
-                break;
-            case 6:
-                imageViewDice5.setImageResource(R.drawable.dice6);
-                break;
-        }
-        return randomNumber;
-    }
-    private int rollDice6(){
-        int randomNumber = rng.nextInt(6) + 1;
-
-        switch(randomNumber) {
-            case 1:
-                imageViewDice6.setImageResource(R.drawable.dice1);
-                break;
-            case 2:
-                imageViewDice6.setImageResource(R.drawable.dice2);
-                break;
-            case 3:
-                imageViewDice6.setImageResource(R.drawable.dice3);
-                break;
-            case 4:
-                imageViewDice6.setImageResource(R.drawable.dice4);
-                break;
-            case 5:
-                imageViewDice6.setImageResource(R.drawable.dice5);
-                break;
-            case 6:
-                imageViewDice6.setImageResource(R.drawable.dice6);
-                break;
-        }
-        return randomNumber;
     }
 }
